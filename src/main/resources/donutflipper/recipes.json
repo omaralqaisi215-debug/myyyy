@@ -1,0 +1,19 @@
+[
+ {"output":"minecraft:quartz_block","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:quartz"}},
+ {"output":"minecraft:glowstone","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:glowstone_dust"}},
+ {"output":"minecraft:honeycomb_block","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:honeycomb"}},
+ {"output":"minecraft:packed_ice","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:ice"}},
+ {"output":"minecraft:snow_block","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:snowball"}},
+ {"output":"minecraft:magma_block","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:magma_cream"}},
+ {"output":"minecraft:clay","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:clay_ball"}},
+ {"output":"minecraft:bricks","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:brick"}},
+ {"output":"minecraft:nether_bricks","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:nether_brick"}},
+ {"output":"minecraft:sandstone","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:sand"}},
+ {"output":"minecraft:crafting_table","count":1,"pattern":["AA","AA"],"key":{"A":"minecraft:oak_planks"}},
+ {"output":"minecraft:stick","count":4,"pattern":["A","A"],"key":{"A":"minecraft:oak_planks"}},
+ {"output":"minecraft:torch","count":4,"pattern":["A","B"],"key":{"A":"minecraft:coal","B":"minecraft:stick"}},
+ {"output":"minecraft:bone_meal","count":3,"pattern":["A"],"key":{"A":"minecraft:bone"}},
+ {"output":"minecraft:iron_block","count":1,"pattern":["AAA","AAA","AAA"],"key":{"A":"minecraft:iron_ingot"}},
+ {"output":"minecraft:gold_block","count":1,"pattern":["AAA","AAA","AAA"],"key":{"A":"minecraft:gold_ingot"}},
+ {"output":"minecraft:diamond_block","count":1,"pattern":["AAA","AAA","AAA"],"key":{"A":"minecraft:diamond"}}
+]
