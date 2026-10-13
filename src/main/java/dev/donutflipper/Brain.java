@@ -23,11 +23,10 @@ import java.util.*;
  *  5. Adaptive bar   - if the recent win rate drops, the required margin goes up automatically.
  */
 public class Brain {
-    public static Brain I = new Brain();
     static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     static final double[] DEFAULT_W = {-0.5, 6.0, 0.0, -1.5, 0.4, 0.5};
     static final double[] UNDERCUT = {0.0, 0.02, 0.05, 0.08, 0.12};
-
+    public static Brain I = new Brain();
     public static class Item {
         public ArrayList<Double> ah = new ArrayList<>();
         public double bid;
