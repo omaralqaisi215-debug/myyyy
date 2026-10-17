@@ -30,6 +30,8 @@ public class Flipper {
     private Cand pending;
     private boolean okFlag, failFlag, sellFail;
     private int sellFailCount;
+    private int scanTries;
+    private long lastDump;
 
     public String status() { return state.name(); }
 
@@ -111,6 +113,7 @@ public class Flipper {
         if (mc.currentScreen instanceof GenericContainerScreen s && titleHas(s, Config.C.ahTitle)) {
             int sync = s.getScreenHandler().syncId;
             ahSync = sync;
+            scanTries = 0;
             Pacer.action(() -> scanAh(sync), Config.C.clickMin, Config.C.clickMax);
             return;
         }
@@ -136,6 +139,7 @@ public class Flipper {
             if (st.isEmpty()) continue;
             List<String> lore = Keys.lore(st);
             double price = Money.find(lore, pr);
+            if (Double.isNaN(price)) price = Money.find(lore, Money.GENERIC); // fallback: any "$1.4M" style line
             if (Double.isNaN(price) || price <= 0) continue;
             int cnt = st.getCount();
             String key = Keys.of(st);
@@ -192,8 +196,35 @@ public class Flipper {
             stateSince = now;
             return;
         }
-        if (seen == 0 && now - stateSince > 0) Chat.info("AH opened but no prices parsed - check 'price-regex' / title settings.");
+        if (seen == 0) {
+            // Items may still be loading, or the lore format differs: retry a few times, then print what we see.
+            if (scanTries < 6) {
+                scanTries++;
+                Pacer.action(() -> scanAh(sync), 350, 450);
+                return;
+            }
+            scanTries = 0;
+            dump(h);
+        }
         toIdle(now);
+    }
+
+    /** Prints the first items' names + lore to chat so the real server format can be read off. */
+    private void dump(GenericContainerScreenHandler h) {
+        long t = System.currentTimeMillis();
+        if (t - lastDump < 15000) return;
+        lastDump = t;
+        Chat.info("No prices parsed. Screen title: '%s'", mc.currentScreen == null ? "?" : mc.currentScreen.getTitle().getString());
+        int n = 0;
+        for (int i = 0; i < h.getRows() * 9 && n < 3; i++) {
+            ItemStack st = h.getSlot(i).getStack();
+            if (st.isEmpty()) continue;
+            n++;
+            List<String> lore = Keys.lore(st);
+            Chat.info("slot %d: %s (%d lore lines)", i, st.getName().getString(), lore.size());
+            for (int k = 0; k < Math.min(lore.size(), 5); k++) Chat.info("  > %s", lore.get(k));
+        }
+        if (n == 0) Chat.info("The AH screen had NO items in it (still loading, or the wrong screen).");
     }
 
     private void confWait(long now) {
@@ -432,7 +463,8 @@ public class Flipper {
         for (int i = 0; i < h.getRows() * 9; i++) {
             ItemStack st = h.getSlot(i).getStack();
             if (st.isEmpty()) continue;
-            if (!word.isEmpty() && st.getName().getString().toLowerCase().contains(word)) return i;
+            String nm = st.getName().getString().toLowerCase().trim();
+            if (nm.equals("yes") || nm.contains("confirm") || (!word.isEmpty() && nm.contains(word))) return i;
             if (lime < 0 && (st.isOf(Items.LIME_STAINED_GLASS_PANE) || st.isOf(Items.LIME_STAINED_GLASS)
                 || st.isOf(Items.LIME_CONCRETE) || st.isOf(Items.GREEN_STAINED_GLASS_PANE))) lime = i;
         }
